@@ -9,107 +9,55 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body class="bg-light">
+<body>
 
   <main>
 
     <header class="py-3 mb-2 text-center">
-      <div class="container">
-        <h1 class="h3 mb-0">Movies catalog</h1>
-      </div>
+      <h1 class="h2 mb-3 text-primary">Search your favourite movie</h1>
     </header>
 
     <div class="container-xl">
-      <div class="row">
-        <div class="col-md-4 mb-4">
+      <div class="d-flex flex-column">
+        <div class="mb-4">
           <div class="container">
             <section class="mb-4">
               <h2 class="sr-only">Movie search form</h2>
 
-              <form class="js-search-form" action="https://echo.htmlacademy.ru" method="GET" autocomplete="off">
-                <div class="form-group">
+              <form class="js-search-form d-flex align-items-center justify-content-between"
+                action="https://echo.htmlacademy.ru" method="GET" autocomplete="off">
+                <div class="form-group flex-grow-1 mb-0">
                   <input class="form-control js-search-form__title-input" type="search" name="title"
                     placeholder="Avengers" aria-label="Title">
                 </div>
-
-                <div class="form-group">
-                  <input class="form-control js-search-form__rating-input" type="number" step="any" name="min_rating"
-                    placeholder="7.5" value="5" aria-label="Minimum rating">
-                </div>
-
-                <div class="form-group">
-                  <select class="form-control js-search-form__genre-select" name="genre" aria-label="Genre">
-                    <option value="All" selected>All</option>
-                    <option value="Action">Action</option>
-                    <option value="Adventure">Adventure</option>
-                    <option value="Animation">Animation</option>
-                    <option value="Biography">Biography</option>
-                    <option value="Comedy">Comedy</option>
-                    <option value="Crime">Crime</option>
-                    <option value="Documentary">Documentary</option>
-                    <option value="Drama">Drama</option>
-                    <option value="Family">Family</option>
-                    <option value="Fantasy">Fantasy</option>
-                    <option value="History">History</option>
-                    <option value="Horror">Horror</option>
-                    <option value="Music">Music</option>
-                    <option value="Musical">Musical</option>
-                    <option value="Mystery">Mystery</option>
-                    <option value="News">News</option>
-                    <option value="Reality-TV">Reality-TV</option>
-                    <option value="Romance">Romance</option>
-                    <option value="Sci-Fi">Sci-Fi</option>
-                    <option value="Sport">Sport</option>
-                    <option value="Thriller">Thriller</option>
-                    <option value="Uncategorized">Uncategorized</option>
-                    <option value="War">War</option>
-                    <option value="Western">Western</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <select class="form-control js-search-form__sort-select" name="sort" aria-label="Sorting">
-                    <option value="rating_desc" selected>Rating (high to low)</option>
-                    <option value="rating_asc">Rating (low to high)</option>
-                    <option value="az">A-Z</option>
-                    <option value="za">Z-A</option>
-                    <option value="year_desc">Year (new to old)</option>
-                    <option value="year_asc">Year (old to new)</option>
-                  </select>
-                </div>
-
-                <button class="btn btn-primary btn-block" type="submit">Search</button>
+                <button class="btn btn-primary ml-3" type="submit">Search</button>
               </form>
-            </section>
-
-            <section class="mb-4">
-              <div class="d-flex align-items-center justify-content-between">
-                <h3>Bookmarked movies</h3>
-                <span class="bookmark-counter"></span>
+              <div class="d-flex align-items-center justify-content-between mt-3">
+                <h2 class="h4 d-block mb-0">Search results: <span
+                    class="js-search-results-count h3 text-danger">0</span>
+                </h2>
+                <button class="btn bookmark-counter">
+                  <span class="counter-num text-success text-center">0</span>
+                </button>
               </div>
-              <ul class="bookmarked-movies list-group mt-3"></ul>
             </section>
           </div>
         </div>
 
 
-        <section class="col-md-8">
-          <p class="bg-success text-white p-2 rounded w-75 mb-2">You can search for a movie through the form
-            on the left.</p>
-          <h2 class="h5">Search results: <span class="js-search-results-count h4 text-primary">0</span></h2>
-
-          <div class="d-none alert alert-warning js-no-results-alert">Not found</div>
-
-          <ul class="search-results row list-unstyled">
-          </ul>
-
-          <nav aria-label="Page navigation example">
-            <ul class="pagination flex-wrap justify-content-center"></ul>
-          </nav>
+        <section class="mb-5">
+          <div>
+            <ul class="search-results row list-unstyled justify-content-center"></ul>
+            <nav aria-label="Page navigation example">
+              <div class="list-unstyled d-flex align-items-center justify-content-center">
+                <a class="page-link js-page-link-prev d-none" href="#">Prev</a>
+                <ul class="pagination list-unstyled d-flex flex-wrap justify-content-center mb-0"></ul>
+                <a class="page-link js-page-link-next d-none" href="#">Next</a>
+              </div>
+            </nav>
+          </div>
         </section>
       </div>
-    </div>
-
   </main>
 
 
@@ -141,25 +89,14 @@
 
   <!-- Movie card template -->
   <template id="movie-card-template">
-    <li class="search-results__item movie d-flex flex-column col-sm-6 mb-4">
+    <li class="search-results__item movie d-flex flex-column col-sm-4 mb-4">
       <div class="card flex-grow-1">
         <img class="movie__poster card-img-top" src="" alt="" width="300" height="200">
 
         <div class="card-body d-flex flex-column">
-          <h3 class="movie__title h5 mb-auto"></h3>
-          <p class="card-text">
-            <img src="img/calendar.svg" alt="Calendar" width="25" height="25">
-            <span class="movie__year"></span>
-          </p>
+          <h3 class="movie__title h5 mb-auto mb-3"></h3>
 
-          <p class="card-text">
-            <img src="img/star.svg" alt="Star" width="25" height="25">
-            <span class="movie__rating"></span>
-          </p>
-
-          <p class="card-text d-flex flex-column flex-md-row flex-wrap justify-content-around">
-            <a class="movie__trailer-link m-1 m-xl-0 btn btn-outline-primary btn-sm" href="" target="_blank">Watch
-              trailer</a>
+          <p class="card-text d-flex flex-column flex-md-row flex-wrap justify-content-center mt-3">
             <button class="m-1 m-xl-0 btn btn-outline-info btn-sm js-movie-modal-opener" type="button"
               data-toggle="modal" data-target="#movie-info-modal">More info</button>
             <button class="m-1 m-xl-0 btn btn-outline-success btn-sm js-movie-bookmark" type="button">Bookmark</button>
@@ -182,7 +119,7 @@
   <!-- Pagination item template -->
   <template id="pagination-item-template">
     <li class="page-item">
-      <a class="page-link js-page-link" data-page-number="" href="#"></a>
+      <a class="page-link js-page-link" href="#">1</a>
     </li>
   </template>
 
