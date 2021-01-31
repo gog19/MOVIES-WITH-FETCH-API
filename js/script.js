@@ -1,4 +1,4 @@
-var foundMovies;
+var foundMovies = [];
 var PER_PAGE = 9;
 var pageInNumber;
 var currentPage = 1;
@@ -60,9 +60,11 @@ var searchWithFetch = movie => {
         });
       }
     }).then(result => {
-      foundMovies = result;
+      result.forEach(movie => {
+        foundMovies.push(movie)
+      })
       console.log(foundMovies);
-      displayMoviesCard(result);
+      displayMoviesCard(foundMovies);
     });
 }
 
@@ -129,8 +131,13 @@ var pageOfOmdb = page => {
         })
       }
     }).then(result => {
-      displayMoviesCard(result);
-    })
+      result.forEach(movie => {
+
+        foundMovies.push(movie);
+      })
+      console.log(foundMovies);
+      displayMoviesCard(foundMovies);
+    });
 }
 
 
@@ -183,8 +190,28 @@ var clickingNextBtn = next => {
 nextBtn.addEventListener('click', clickingNextBtn);
 
 var count = 0;
+var bookmarkResult = $_('.bookmark-result');
 var counterOfBookmark = $_('.counter-num');
 var bookmarkArray = JSON.parse(localStorage.getItem('bookmark')) || [];
+var bookmarkTemplate = $_('#bookmarked-movie-template').content;
+var bookmarkFragment = document.createDocumentFragment();
+
+
+function addBookmark(data) {
+  bookmarkResult.innerHTML = '';
+  data.forEach(movie => {
+    var cloneBookmarkTemp = bookmarkTemplate.cloneNode(true);
+
+    $_('.movie__poster', cloneBookmarkTemp).src = movie.smallThumbnail;
+    $_('.movie__poster', cloneBookmarkTemp).alt = `Poster of ${movie.title}`;
+    $_('.js-movie-bookmark', cloneBookmarkTemp).dataset.imdbId = movie.imdbID;
+    $_('.movie__title', cloneBookmarkTemp).textContent = movie.title;
+
+    bookmarkFragment.appendChild(cloneBookmarkTemp);
+  });
+
+  bookmarkResult.appendChild(bookmarkFragment);
+}
 
 function findBookmarkElement(evt) {
   if (evt.target.matches('.js-movie-bookmark')) {
@@ -192,13 +219,45 @@ function findBookmarkElement(evt) {
       return movie.imdbID === evt.target.dataset.imdbId;
     });
 
+    console.log(findBookmarkElement);
+
     if (!bookmarkArray.includes(findBookmarkElement)) {
       bookmarkArray.push(findBookmarkElement);
       console.log(bookmarkArray);
       count++;
       counterOfBookmark.textContent = count;
     }
+
+    addBookmark(bookmarkArray);
   }
 }
 
 elResult.addEventListener('click', findBookmarkElement);
+
+var bookmarkCounter = $_('.bookmark-counter');
+
+function openBookmarkSection() {
+
+  $_('.search-results-bookmark').classList.remove('d-none');
+  $_('.search-results').classList.add('d-none');
+
+  $_('.list-pagination').classList.add('d-none');
+  $_('.list-pagination').classList.remove('d-flex');
+
+}
+
+bookmarkCounter.addEventListener('click', openBookmarkSection)
+
+var removeBookmarkSection = $_('.comeback-main');
+
+function openMainSection() {
+
+  $_('.search-results-bookmark').classList.add('d-none');
+  $_('.search-results').classList.remove('d-none');
+
+  $_('.list-pagination').classList.remove('d-none');
+  $_('.list-pagination').classList.add('d-flex');
+
+}
+
+removeBookmarkSection.addEventListener('click', openMainSection)

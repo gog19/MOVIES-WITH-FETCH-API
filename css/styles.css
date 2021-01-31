@@ -115,8 +115,9 @@ html {
 }
 
 .bookmark-counter {
-    position: relative;
-    z-index: 50;
+    position: fixed;
+    z-index: 150;
+    right: 12%;
 }
 
 .counter-num {

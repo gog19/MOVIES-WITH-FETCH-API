@@ -46,10 +46,14 @@
 
 
         <section class="mb-5">
-          <div>
+          <div class="d-flex flex-column">
             <ul class="search-results row list-unstyled justify-content-center"></ul>
+            <div class="search-results-bookmark d-none">
+              <button class="comeback-main btn btn-outline-dark mb-2 text-center">Main</button>
+              <ul class="bookmark-result list-unstyled row"></ul>
+            </div>
             <nav aria-label="Page navigation example">
-              <div class="list-unstyled d-flex align-items-center justify-content-center">
+              <div class="list-pagination list-unstyled d-flex align-items-center justify-content-center">
                 <a class="page-link js-page-link-prev d-none" href="#">Prev</a>
                 <ul class="pagination list-unstyled d-flex flex-wrap justify-content-center mb-0"></ul>
                 <a class="page-link js-page-link-next d-none" href="#">Next</a>
@@ -109,9 +113,20 @@
 
   <!-- Bookmarked movie template -->
   <template id="bookmarked-movie-template">
-    <li class="bookmarked-movie list-group-item mb-3">
-      <h3 class="bookmarked-movie__title h6"></h3>
-      <button class="btn btn-sm btn-danger js-remove-bookmarked-movie-button">Remove</button>
+    <li class="bookmark-results__item movie d-flex flex-column col-sm-4 mb-4">
+      <div class="card flex-grow-1">
+        <img class="movie__poster card-img-top" src="" alt="" width="300" height="200">
+
+        <div class="card-body d-flex flex-column">
+          <h3 class="movie__title h5 mb-auto mb-3"></h3>
+
+          <p class="card-text d-flex flex-column flex-md-row flex-wrap justify-content-center mt-3">
+            <button class="m-1 m-xl-0 btn btn-outline-info btn-sm js-movie-modal-opener" type="button"
+              data-toggle="modal" data-target="#movie-info-modal">More info</button>
+            <button class="m-1 m-xl-0 btn btn-outline-danger btn-sm js-movie-bookmark" type="button">Remove</button>
+          </p>
+        </div>
+      </div>
     </li>
   </template>
 
