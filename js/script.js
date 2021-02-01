@@ -1,5 +1,5 @@
 var foundMovies = [];
-var PER_PAGE = 9;
+var PER_PAGE = 10;
 var pageInNumber;
 var currentPage = 1;
 
@@ -20,8 +20,8 @@ var findMoviesCard = movie => {
 
   $_('.movie__poster', cloneTemplate).src = movie.smallThumbnail;
   $_('.movie__poster', cloneTemplate).alt = `Poster of ${movie.title}`;
-  $_('.js-movie-bookmark', cloneTemplate).dataset.imdbId = movie.imdbID;
   $_('.movie__title', cloneTemplate).textContent = movie.title;
+  $_('.js-movie-modal-opener', cloneTemplate).dataset.target = movie.imdbId;
 
   return cloneTemplate;
 }
@@ -55,17 +55,21 @@ var searchWithFetch = movie => {
           return {
             title: movie.Title,
             smallThumbnail: movie.Poster,
-            imdbID: movie.imdbID
+            imdbId: movie.imdbID
           }
         });
       }
     }).then(result => {
-      result.forEach(movie => {
-        foundMovies.push(movie)
-      })
-      console.log(foundMovies);
-      displayMoviesCard(foundMovies);
+      console.log(result);
+      displayMoviesCard(result);
     });
+}
+
+var pageCounter = currentPage => {
+  var begin = (currentPage - 1) * PER_PAGE;
+  var end = begin + PER_PAGE;
+
+  return foundMovies.slice(begin, end);
 }
 
 elForm.addEventListener('submit', evt => {
@@ -74,13 +78,6 @@ elForm.addEventListener('submit', evt => {
   searchWithFetch(elTitleInput.value);
 
 });
-
-var pagenationCounter = pageNumber => {
-  var begin = (pageNumber - 1) * PER_PAGE;
-  var end = begin + PER_PAGE;
-
-  return foundMovies.slice(begin, end);
-}
 
 var prevBtn = $_('.js-page-link-prev');
 var nextBtn = $_('.js-page-link-next');
@@ -115,7 +112,7 @@ var displayPagination = movies => {
 
 
 var pageOfOmdb = page => {
-  fetch(`http://omdbapi.com/?apikey=11d5da55&s=${elTitleInput.value}&page=${page}`)
+  fetch(`https://omdbapi.com/?apikey=11d5da55&s=${elTitleInput.value}&page=${page}`)
     .then(response => {
       if (response.status === 200) {
         return response.json();
@@ -128,15 +125,11 @@ var pageOfOmdb = page => {
             smallThumbnail: movie.Poster,
             imdbId: movie.imdbID
           }
-        })
+        });
       }
     }).then(result => {
-      result.forEach(movie => {
-
-        foundMovies.push(movie);
-      })
-      console.log(foundMovies);
-      displayMoviesCard(foundMovies);
+      console.log(result);
+      displayMoviesCard(result);
     });
 }
 
@@ -148,7 +141,7 @@ resultPagenation.addEventListener('click', page => {
 
     currentPage = Number(page.target.dataset.page);
 
-    displayMoviesCard(pagenationCounter(pageOfOmdb(currentPage)));
+    displayMoviesCard(pageCounter(pageOfOmdb(currentPage)));
 
     resultPagenation.querySelectorAll('.page-item').forEach(page => page.classList.remove('active'));
 
@@ -170,14 +163,14 @@ var clickingPrevBtn = prev => {
     });
   }
 
-  displayMoviesCard(pagenationCounter(pageOfOmdb(currentPage)));
+  displayMoviesCard(pageOfOmdb(currentPage));
 
 }
 
 prevBtn.addEventListener('click', clickingPrevBtn);
 var clickingNextBtn = next => {
   currentPage += 1;
-  displayMoviesCard(pagenationCounter(pageOfOmdb(currentPage)));
+  displayMoviesCard(pageOfOmdb(currentPage));
 
   resultPagenation.querySelectorAll('.page-item').forEach(page => {
     page.classList.remove('active');
@@ -189,75 +182,52 @@ var clickingNextBtn = next => {
 
 nextBtn.addEventListener('click', clickingNextBtn);
 
-var count = 0;
-var bookmarkResult = $_('.bookmark-result');
-var counterOfBookmark = $_('.counter-num');
-var bookmarkArray = JSON.parse(localStorage.getItem('bookmark')) || [];
-var bookmarkTemplate = $_('#bookmarked-movie-template').content;
-var bookmarkFragment = document.createDocumentFragment();
 
+// Modal ma`lumotlarini sahifaga chiqarish
 
-function addBookmark(data) {
-  bookmarkResult.innerHTML = '';
-  data.forEach(movie => {
-    var cloneBookmarkTemp = bookmarkTemplate.cloneNode(true);
+function showModalInfo(data) {
+  var movieModalContent = $_('.movie-info-modal-dialog');
 
-    $_('.movie__poster', cloneBookmarkTemp).src = movie.smallThumbnail;
-    $_('.movie__poster', cloneBookmarkTemp).alt = `Poster of ${movie.title}`;
-    $_('.js-movie-bookmark', cloneBookmarkTemp).dataset.imdbId = movie.imdbID;
-    $_('.movie__title', cloneBookmarkTemp).textContent = movie.title;
+  $_('.movie-info-modal-title', movieModalContent).textContent = data.Title;
+  $_('.movie-img', movieModalContent).src = data.Poster;
+  $_('.movie-img', movieModalContent).alt = `This is poster of ${data.Title}`;
+  $_('.movie-country', movieModalContent).textContent = data.Country;
+  $_('.movie-year', movieModalContent).textContent = data.Year;
+  $_('.movie-genre', movieModalContent).textContent = data.Genre;
+  $_('.movie-director', movieModalContent).textContent = data.Director;
+  $_('.movie-actors', movieModalContent).textContent = data.Actors;
+  $_('.movie-runtime', movieModalContent).textContent = data.Runtime;
+  $_('.movie-rating', movieModalContent).textContent = data.Rating;
+  $_('.movie-budget', movieModalContent).textContent = data.BoxOffice;
+  $_('.movie-production', movieModalContent).textContent = data.Production;
+  $_('.movie-language', movieModalContent).textContent = data.Language;
+  $_('.movie-awards', movieModalContent).textContent = data.Awards;
+  $_('.movie-more-info', movieModalContent).textContent = data.Plot;
 
-    bookmarkFragment.appendChild(cloneBookmarkTemp);
-  });
+  return movieModalContent;
 
-  bookmarkResult.appendChild(bookmarkFragment);
-}
-
-function findBookmarkElement(evt) {
-  if (evt.target.matches('.js-movie-bookmark')) {
-    var findBookmarkElement = foundMovies.find(movie => {
-      return movie.imdbID === evt.target.dataset.imdbId;
-    });
-
-    console.log(findBookmarkElement);
-
-    if (!bookmarkArray.includes(findBookmarkElement)) {
-      bookmarkArray.push(findBookmarkElement);
-      console.log(bookmarkArray);
-      count++;
-      counterOfBookmark.textContent = count;
+  function openModalInfo(evt) {
+    if (evt.target.matches('.js-movie-modal-opener')) {
+      $_('.movie-info-modal').classList.remove('d-none');
+      fetch(`http://omdbapi.com/?apikey=11d5da55&i=${evt.target.dataset.target}&plot=full`)
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          }
+        })
+        .then(result => {
+          if (result.Response === 'True') {
+            showModalInfo(result);
+          }
+        })
     }
-
-    addBookmark(bookmarkArray);
   }
-}
 
-elResult.addEventListener('click', findBookmarkElement);
+  elResult.addEventListener('click', openModalInfo);
 
-var bookmarkCounter = $_('.bookmark-counter');
+  function hideModalInfo() {
+    $_('.movie-info-modal').classList.add('d-none');
+  }
 
-function openBookmarkSection() {
+  $_('.hide-modal').addEventListener('click', hideModalInfo);
 
-  $_('.search-results-bookmark').classList.remove('d-none');
-  $_('.search-results').classList.add('d-none');
-
-  $_('.list-pagination').classList.add('d-none');
-  $_('.list-pagination').classList.remove('d-flex');
-
-}
-
-bookmarkCounter.addEventListener('click', openBookmarkSection)
-
-var removeBookmarkSection = $_('.comeback-main');
-
-function openMainSection() {
-
-  $_('.search-results-bookmark').classList.add('d-none');
-  $_('.search-results').classList.remove('d-none');
-
-  $_('.list-pagination').classList.remove('d-none');
-  $_('.list-pagination').classList.add('d-flex');
-
-}
-
-removeBookmarkSection.addEventListener('click', openMainSection)

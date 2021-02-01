@@ -1,131 +1,140 @@
 body {
-    overflow-x: hidden;
-    background-color: rgb(238, 255, 218) !important;
+  overflow-x: hidden;
+  background-color: rgb(238, 255, 218) !important;
 }
 
 .form__select {
-    border: 1px solid #ced4da;
-    padding: 14px 8px !important;
-    font-size: 16px;
-    color: #495057;
-    width: 100%;
+  border: 1px solid #ced4da;
+  padding: 14px 8px !important;
+  font-size: 16px;
+  color: #495057;
+  width: 100%;
 }
 
 .movies__list {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    display: flex;
-    flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .movies__item {
-    margin-right: 50px;
+  margin-right: 50px;
 }
 
 .btn-group {
-    display: flex !important;
-    justify-content: space-between !important;
-    margin-top: auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  margin-top: auto !important;
 }
 
 .trailer {
-    font-size: 18px !important;
+  font-size: 18px !important;
 }
 
 a.trailer:hover {
-    background-color: #007bff;
-    color: #fff !important;
+  background-color: #007bff;
+  color: #fff !important;
 }
 
 .info {
-    font-size: 18px !important;
+  font-size: 18px !important;
 }
 
 .info:hover {
-    background-color: #17a2b8;
-    color: #fff !important;
+  background-color: #17a2b8;
+  color: #fff !important;
 }
 
 .bookmark {
-    font-size: 18px !important;
+  font-size: 18px !important;
 }
 
 .bookmark:hover {
-    background-color: #28a745;
-    color: #fff !important;
+  background-color: #28a745;
+  color: #fff !important;
 }
 
 .bookmark-counter {
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    background-image: url('../img/bookmark.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    color: #333;
-    padding-top: 10px;
-    font-weight: bold;
-    font-size: 16px;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  background-image: url('../img/bookmark.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  color: #333;
+  padding-top: 10px;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 html {
-    scroll-behavior: smooth;
-  }
-  
-  .movie__poster {
-    object-fit: cover;
-  }
-  
-  .movie-info-modal .modal-dialog {
-    transition: opacity 0.5s ease,
-      transform 0.5s ease !important;
-    opacity: 0;
-    /* transform: translateY(1000px) !important; */
-    transform: scale(0) !important;
-    /* transform: rotateY(360deg) !important; */
-  }
-  
-  .movie-info-modal.show .modal-dialog {
-    opacity: 1;
-    /* transform: translateY(0) !important; */
-    transform: scale(1) !important;
-    /* transform: rotateY(0deg) !important; */
-  }
-  
-  mark {
-    display: inline-block;
-    background-color: rgb(250, 255, 164);
-  }
-  
+  scroll-behavior: smooth;
+}
+
+.movie__poster {
+  object-fit: cover;
+}
+
+.movie-info-modal .modal-dialog {
+  transition: opacity 0.5s ease,
+  transform 0.5s ease !important;
+  opacity: 0;
+  /* transform: translateY(1000px) !important; */
+  transform: scale(0) !important;
+  /* transform: rotateY(360deg) !important; */
+}
+
+.movie-info-modal.show .modal-dialog {
+  opacity: 1;
+  /* transform: translateY(0) !important; */
+  transform: scale(1) !important;
+  /* transform: rotateY(0deg) !important; */
+}
+
+mark {
+  display: inline-block;
+  background-color: rgb(250, 255, 164);
+}
+
 .active {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 .disabled {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 .js-movie-modal-opener {
-    margin-right: 7px !important;
+  margin-right: 7px !important;
 }
 
 .js-movie-bookmark {
-    margin-left: 7px !important;
+  margin-left: 7px !important;
 }
 
-.bookmark-counter {
-    position: fixed;
-    z-index: 150;
-    right: 12%;
+.movie-info-modal-content {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: 100%;
+  z-index: 11;
+  top: 0;
+  left: 0;
 }
 
-.counter-num {
-    position: absolute;
-    z-index: 1;
-    top: 18%;
-    right: -3%;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+.movie-info-modal-dialog {
+  background-color: #fff;
+  width: 800px;
+  max-height: 740px;
+  border-radius: 8px;
+  position: absolute;
+  z-index: 50;
+  left: 27%;
+  top: 7%;
+}
+
+.movie-info-modal-title {
+  margin-right: 10px;
 }
