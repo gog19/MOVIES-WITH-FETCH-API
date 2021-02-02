@@ -79,19 +79,9 @@ elForm.addEventListener('submit', evt => {
 
 });
 
-var prevBtn = $_('.js-page-link-prev');
-var nextBtn = $_('.js-page-link-next');
 
 var displayPagination = movies => {
   pageInNumber = Math.ceil(movies / PER_PAGE);
-
-  prevBtn.classList.add('d-none');
-  nextBtn.classList.add('d-none');
-
-  if (pageInNumber > 2) {
-    prevBtn.classList.remove('d-none');
-    nextBtn.classList.remove('d-none');
-  }
 
   var pageFragment = document.createDocumentFragment();
 
@@ -151,38 +141,6 @@ resultPagenation.addEventListener('click', page => {
   }
 });
 
-var clickingPrevBtn = prev => {
-  if (currentPage > 1) {
-    currentPage -= 1;
-
-    resultPagenation.querySelectorAll('.page-item').forEach(page => {
-      page.classList.remove('active');
-      if (currentPage === Number(page.textContent)) {
-        page.classList.add('active');
-      }
-    });
-  }
-
-  displayMoviesCard(pageOfOmdb(currentPage));
-
-}
-
-prevBtn.addEventListener('click', clickingPrevBtn);
-var clickingNextBtn = next => {
-  currentPage += 1;
-  displayMoviesCard(pageOfOmdb(currentPage));
-
-  resultPagenation.querySelectorAll('.page-item').forEach(page => {
-    page.classList.remove('active');
-    if (currentPage === Number(page.textContent)) {
-      page.classList.add('active');
-    }
-  });
-}
-
-nextBtn.addEventListener('click', clickingNextBtn);
-
-
 // Modal ma`lumotlarini sahifaga chiqarish
 
 function showModalInfo(data) {
@@ -205,29 +163,30 @@ function showModalInfo(data) {
   $_('.movie-more-info', movieModalContent).textContent = data.Plot;
 
   return movieModalContent;
+}
 
-  function openModalInfo(evt) {
-    if (evt.target.matches('.js-movie-modal-opener')) {
-      $_('.movie-info-modal').classList.remove('d-none');
-      fetch(`http://omdbapi.com/?apikey=11d5da55&i=${evt.target.dataset.target}&plot=full`)
-        .then(response => {
-          if (response.status === 200) {
-            return response.json();
-          }
-        })
-        .then(result => {
-          if (result.Response === 'True') {
-            showModalInfo(result);
-          }
-        })
-    }
+function openModalInfo(evt) {
+  if (evt.target.matches('.js-movie-modal-opener')) {
+    $_('.movie-info-modal').classList.remove('d-none');
+    fetch(`http://omdbapi.com/?apikey=11d5da55&i=${evt.target.dataset.target}&plot=full`)
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        }
+      })
+      .then(result => {
+        if (result.Response === 'True') {
+          showModalInfo(result);
+        }
+      })
   }
+}
 
-  elResult.addEventListener('click', openModalInfo);
+elResult.addEventListener('click', openModalInfo);
 
-  function hideModalInfo() {
-    $_('.movie-info-modal').classList.add('d-none');
-  }
+function hideModalInfo() {
+  $_('.movie-info-modal').classList.add('d-none');
+}
 
-  $_('.hide-modal').addEventListener('click', hideModalInfo);
+$_('.hide-modal').addEventListener('click', hideModalInfo);
 

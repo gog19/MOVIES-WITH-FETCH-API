@@ -130,6 +130,7 @@ mark {
   max-height: 740px;
   border-radius: 8px;
   position: absolute;
+  overflow: auto;
   z-index: 50;
   left: 27%;
   top: 7%;
