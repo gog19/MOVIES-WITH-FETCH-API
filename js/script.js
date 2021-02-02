@@ -18,8 +18,6 @@ var elCounterLength = $_('.js-search-results-count');
 var findMoviesCard = movie => {
   var cloneTemplate = elCardTemplate.cloneNode(true);
 
-  $_('.movie__poster', cloneTemplate).src = movie.smallThumbnail;
-  $_('.movie__poster', cloneTemplate).alt = `Poster of ${movie.title}`;
   $_('.movie__title', cloneTemplate).textContent = movie.title;
   $_('.js-movie-modal-opener', cloneTemplate).dataset.target = movie.imdbId;
 
