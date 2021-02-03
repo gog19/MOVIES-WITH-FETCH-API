@@ -42,7 +42,7 @@ var pageTemplate = $_('#pagination-item-template').content;
 var resultPagenation = $_('.pagination');
 
 var searchWithFetch = movie => {
-  fetch(`http://omdbapi.com/?apikey=11d5da55&s=${movie}`)
+  fetch(`https://omdbapi.com/?apikey=11d5da55&s=${movie}`)
     .then(response => {
       if (response.status === 200) {
         return response.json();
@@ -193,7 +193,7 @@ function showFullInfo(movie) {
 }
 
 function openFullInfo(evt) {
-  fetch(`http://omdbapi.com/?apikey=11d5da55&i=${evt}&plot=full`)
+  fetch(`https://omdbapi.com/?apikey=11d5da55&i=${evt}&plot=full`)
     .then(response => {
       if (response.status === 200) {
         return response.json();
