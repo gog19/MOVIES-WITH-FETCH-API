@@ -125,3 +125,15 @@ mark {
 {
 	background-color: #59d3ff;	
 }
+
+.dropdown-menu {
+  min-width: 0 !important;
+}
+
+.dropdown-item {
+  padding: .25rem 1rem !important;
+}
+
+.container-xl {
+  max-width: 1240px !important;
+}

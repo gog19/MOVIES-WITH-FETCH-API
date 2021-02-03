@@ -14,31 +14,28 @@
   <main>
 
     <header class="py-3 mb-2 text-center">
-      <h1 class="h2 mb-3 text-primary">Search your favourite movie</h1>
+      <h1 class="h2 mb-2 text-primary">Search your favourite movie</h1>
     </header>
 
     <div class="container-xl">
       <div class="d-flex flex-column">
         <div>
-          <div class="container">
-            <section class="mb-4">
-              <h2 class="sr-only">Movie search form</h2>
+          <section class="mb-5">
+            <h2 class="sr-only">Movie search form</h2>
 
-              <form class="js-search-form d-flex align-items-center justify-content-between"
-                action="https://echo.htmlacademy.ru" method="GET" autocomplete="off">
-                <div class="form-group flex-grow-1 mb-0">
-                  <input class="form-control js-search-form__title-input" type="search" name="title"
-                    placeholder="Avengers" aria-label="Title">
-                </div>
-                <button class="btn btn-primary ml-3" type="submit">Search</button>
-              </form>
-              <div class="d-flex align-items-center justify-content-between mt-3">
-                <h2 class="h4 d-block mb-0">Search results: <span
-                    class="js-search-results-count h3 text-danger">0</span>
+            <form class="js-search-form d-flex align-items-center justify-content-between"
+              action="https://echo.htmlacademy.ru" method="GET" autocomplete="off">
+              <div class="form-group flex-grow-1 mb-0">
+                <input class="form-control js-search-form__title-input" type="search" name="title"
+                  placeholder="Avengers" aria-label="Title">
+              </div>
+              <button class="btn btn-primary ml-3" type="submit">Search</button>
+              <div class="d-flex align-items-center justify-content-between">
+                <h2 class="h4 d-block mb-0 ml-3">Results: <span class="js-search-results-count h3 text-danger">0</span>
                 </h2>
               </div>
-            </section>
-          </div>
+            </form>
+          </section>
         </div>
 
 
@@ -97,6 +94,13 @@
           <nav class="mb-3" aria-label="Page navigation example">
             <div class="list-pagination list-unstyled d-flex align-items-center justify-content-center">
               <ul class="pagination list-unstyled d-flex flex-wrap justify-content-center mb-0"></ul>
+              <div class="dropdown d-none">
+                <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All</a>
+                <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
+                  <!-- <a class="dropdown-item text-center" href="#">8</a> -->
+                </div>
+              </div>
             </div>
           </nav>
         </section>

@@ -1,6 +1,7 @@
 var foundMovies = [];
 var PER_PAGE = 10;
 var pageInNumber;
+var generalTotalResults;
 var currentPage = 1;
 
 var elForm = $_('.js-search-form');
@@ -51,6 +52,7 @@ var searchWithFetch = movie => {
       if (checking.Response === 'True') {
         $_('.full-content-wrapper').classList.add('d-block');
         $_('.initial-alert').classList.add('d-none');
+        generalTotalResults = checking.totalResults;
         elCounterLength.textContent = checking.totalResults;
         displayPagination(Number(checking.totalResults));
         document.querySelector('.error-alert').classList.remove('d-block');
@@ -80,6 +82,7 @@ var searchWithFetch = movie => {
         document.querySelector('.pagination').classList.remove('d-flex');
         $_('.initial-alert').classList.add('d-none');
         elCounterLength.textContent = 0;
+        $_('.dropdown').classList.add('d-none');
       }
     })
 }
@@ -98,18 +101,39 @@ elForm.addEventListener('submit', evt => {
 
 });
 
+var displayPaginationWithCount = () => {
 
-var displayPagination = movies => {
+  showPaginationResult(10);
+
+  document.querySelector('.page-item').classList.add('active');
+
+}
+
+function displayPagination(movies) {
   pageInNumber = Math.ceil(movies / PER_PAGE);
 
-  var pageFragment = document.createDocumentFragment();
+  if (pageInNumber < 10) {
 
-  document.querySelectorAll('.page-item').forEach(page => {
+    showPaginationResult(pageInNumber);
+
+  } else if (pageInNumber > 10) {
+    displayPaginationWithCount();
+    $_('.dropdown').classList.remove('d-none');
+    displayRestPages(generalTotalResults);
+  }
+
+  resultPagenation.querySelectorAll('.page-item').forEach(page => {
     page.classList.remove('active');
-  })
+  });
 
+
+  resultPagenation.querySelector('.page-item').classList.add('active');
+}
+
+function showPaginationResult(number) {
+  var pageFragment = document.createDocumentFragment();
   resultPagenation.innerHTML = '';
-  for (let i = 1; i <= pageInNumber; i++) {
+  for (let i = 1; i <= number; i++) {
     var pageTemplateClone = pageTemplate.cloneNode(true);
 
     $_('.js-page-link', pageTemplateClone).textContent = i;
@@ -119,12 +143,43 @@ var displayPagination = movies => {
   }
 
   resultPagenation.appendChild(pageFragment);
-
-  resultPagenation.querySelector('.page-item').classList.add('active');
 }
 
 
-var pageOfOmdb = page => {
+var dropdownMenu = document.querySelector('.dropdown-menu')
+
+function displayRestPages(number) {
+
+  for (let i = 11; i <= Math.ceil(number / PER_PAGE); i++) {
+
+    var linkofPage = document.createElement('a');
+    linkofPage.textContent = i;
+    linkofPage.dataset.id = i;
+    linkofPage.href = '#';
+    linkofPage.className = 'dropdown-item';
+
+    dropdownMenu.appendChild(linkofPage);
+  }
+}
+
+dropdownMenu.addEventListener('click', evt => {
+  if (evt.target.matches('.dropdown-item')) {
+    resultPagenation.querySelectorAll('.page-item').forEach(page => {
+      page.classList.remove('active');
+    });
+
+    dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+      item.classList.remove('active');
+    });
+
+    evt.target.classList.add('active');
+
+    pageOfOmdb(Number(evt.target.dataset.id));
+
+  }
+});
+
+function pageOfOmdb(page) {
   fetch(`https://omdbapi.com/?apikey=11d5da55&s=${elTitleInput.value}&page=${page}`)
     .then(response => {
       if (response.status === 200) {
@@ -150,7 +205,6 @@ var pageOfOmdb = page => {
 }
 
 
-
 resultPagenation.addEventListener('click', page => {
   if (page.target.matches('.js-page-link')) {
     page.preventDefault();
@@ -161,6 +215,11 @@ resultPagenation.addEventListener('click', page => {
     displayMoviesCard(pageCounter(pageOfOmdb(currentPage)));
 
     document.querySelectorAll('.page-item').forEach(page => page.classList.remove('active'));
+
+
+    dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+      item.classList.remove('active');
+    });
 
     page.target.closest('.page-item').classList.add('active');
     window.scrollTo(0, 0);
