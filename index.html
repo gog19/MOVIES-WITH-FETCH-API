@@ -43,6 +43,8 @@
 
 
         <section>
+          <div class="initial-alert alert alert-success w-50 ml-auto mr-auto h3 text-center">Search with title</div>
+          <div class="error-alert alert alert-warning w-50 ml-auto mr-auto h3 text-center d-none">Not founded</div>
           <div class="row mb-3">
             <div class="col-md-5">
               <h2 class="sr-only">This is pagination</h2>
@@ -50,7 +52,47 @@
                 <ul class="search-results list-unstyled justify-content-center list-group"></ul>
               </div>
             </div>
-            <div class="col-md-7 bg-dark rounded"></div>
+            <div class="col-md-7 full-content-wrapper bg-dark text-white rounded d-none">
+              <div class="movie-info-dialog mt-2 d-flex flex-column vh-25 flex-grow-1">
+                <header class="movie-info-header d-flex align-items-center justify-content-between px-3 py-3 bg-dark">
+                  <h3 class="movie-info-title mb-0 font-weight-bold"></h3>
+                </header>
+                <div class="movie-info-body px-3 pt-3 overflow-auto flex-grow-1" id="style-8">
+                  <div class="d-flex">
+                    <img class="movie-img rounded">
+                    <div class="movie-short-info px-4">
+                      <p class="h6 font-weight-normal mt-2">Country: <span
+                          class="font-weight-bold text-white movie-country font-weight-normal ml-1"></span></p>
+                      <p class="h6 font-weight-normal">Year: <span
+                          class="font-weight-bold text-white movie-year font-weight-normal ml-1"></span></p>
+                      <p class="h6 font-weight-normal">Genre: <span
+                          class="font-weight-bold text-white movie-genre font-weight-normal ml-1"></span></p>
+                      <p class="h6 font-weight-normal">Director: <span
+                          class="font-weight-bold text-white movie-director font-weight-normal ml-1"></span></p>
+                      <p class="h6 font-weight-normal">Actors: <span
+                          class="font-weight-bold text-white movie-actors font-weight-normal ml-1"></span></p>
+                      <p class="h6 font-weight-normal">Runtime: <span
+                          class="font-weight-bold text-white movie-runtime font-weight-normal ml-1"></span></p>
+                      <p class="h6 font-weight-normal">Rating: <span
+                          class="font-weight-bold text-white movie-rating font-weight-normal ml-1"></span></p>
+                      <p class="h6 font-weight-normal">Box Office: <span
+                          class="font-weight-bold text-white movie-budget font-weight-normal ml-1"></span></p>
+                      <p class="h6 font-weight-normal">Production: <span
+                          class="font-weight-bold movie-production font-weight-normal ml-1"></span>
+                      </p>
+                      <p class="h6 font-weight-normal">Language: <span
+                          class="font-weight-bold text-white movie-language font-weight-normal ml-1"></span></p>
+                      <p class="h6 font-weight-normal">Awards: <span
+                          class="font-weight-bold text-white movie-awards font-weight-bold ml-1"></span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="py-4">
+                    <p class="movie-more-info"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <nav class="mb-3" aria-label="Page navigation example">
             <div class="list-pagination list-unstyled d-flex align-items-center justify-content-center">
@@ -64,39 +106,6 @@
 
 
   <!-- MODAL -->
-
-  <section class="movie-info-modal d-none">
-    <div class="movie-info-modal-content">
-      <div class="movie-info-modal-dialog mb-5">
-        <header class="movie-info-modal-header d-flex align-items-center justify-content-between px-5 py-3">
-          <h3 class="movie-info-modal-title mb-0 font-weight-bold">Hulk</h3>
-          <button class="hide-modal btn btn-outline-danger">X</button>
-        </header>
-        <div class="movie-info-modal-body px-5 py-3 pb-4">
-          <div class="d-flex">
-            <img class="movie-img rounded">
-            <div class="modal-short-info px-4">
-              <p class="h6 mt-2">Country: <span class="movie-country font-weight-normal ml-1"></span></p>
-              <p class="h6">Year: <span class="movie-year font-weight-normal ml-1"></span></p>
-              <p class="h6">Genre: <span class="movie-genre font-weight-normal ml-1"></span></p>
-              <p class="h6">Director: <span class="movie-director font-weight-normal ml-1"></span></p>
-              <p class="h6">Actors: <span class="movie-actors font-weight-normal ml-1"></span></p>
-              <p class="h6">Runtime: <span class="movie-runtime font-weight-normal ml-1"></span></p>
-              <p class="h6">Rating: <span class="movie-rating font-weight-normal ml-1"></span></p>
-              <p class="h6">Box Office: <span class="movie-budget font-weight-normal ml-1"></span></p>
-              <p class="h6">Production: <span class="movie-production font-weight-normal ml-1"></span></p>
-              <p class="h6">Language: <span class="movie-language font-weight-normal ml-1"></span></p>
-              <p class="h6">Awards: <span class="movie-awards font-weight-normal ml-1"></span>
-              </p>
-            </div>
-          </div>
-          <div class="py-4">
-            <p class="movie-more-info"></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
 
   <!-- TEMPLATES -->

@@ -33,6 +33,8 @@ var displayMoviesCard = (data) => {
 
   elResult.appendChild(cardFragment);
 
+  // document.querySelector('.list-group-item').classList.add('active-item');
+
 }
 
 var elNoResultsAlert = $_('.js-no-results-alert');
@@ -47,8 +49,13 @@ var searchWithFetch = movie => {
       }
     }).then(checking => {
       if (checking.Response === 'True') {
+        $_('.full-content-wrapper').classList.add('d-block');
+        $_('.initial-alert').classList.add('d-none');
         elCounterLength.textContent = checking.totalResults;
         displayPagination(Number(checking.totalResults));
+        document.querySelector('.error-alert').classList.remove('d-block');
+        document.querySelector('.pagination').classList.remove('d-none');
+        document.querySelector('.pagination').classList.add('d-flex');
         return checking.Search.map(movie => {
           return {
             title: movie.Title,
@@ -58,9 +65,23 @@ var searchWithFetch = movie => {
         });
       }
     }).then(result => {
-      console.log(result);
       displayMoviesCard(result);
-    });
+      openFullInfo(result[0].imdbId);
+      if (result[0].title === document.querySelector('.movie__title').textContent) {
+        document.querySelector('.list-group-item').classList.add('active-item');
+      }
+    })
+    .catch(reject => {
+      console.log(`Error: ${reject}`);
+      if (reject) {
+        document.querySelector('.error-alert').classList.add('d-block');
+        $_('.full-content-wrapper').classList.remove('d-block');
+        document.querySelector('.pagination').classList.add('d-none');
+        document.querySelector('.pagination').classList.remove('d-flex');
+        $_('.initial-alert').classList.add('d-none');
+        elCounterLength.textContent = 0;
+      }
+    })
 }
 
 var pageCounter = currentPage => {
@@ -82,6 +103,10 @@ var displayPagination = movies => {
   pageInNumber = Math.ceil(movies / PER_PAGE);
 
   var pageFragment = document.createDocumentFragment();
+
+  document.querySelectorAll('.page-item').forEach(page => {
+    page.classList.remove('active');
+  })
 
   resultPagenation.innerHTML = '';
   for (let i = 1; i <= pageInNumber; i++) {
@@ -116,8 +141,11 @@ var pageOfOmdb = page => {
         });
       }
     }).then(result => {
-      console.log(result);
       displayMoviesCard(result);
+      openFullInfo(result[0].imdbId);
+      if (result[0].title === document.querySelector('.movie__title').textContent) {
+        document.querySelector('.list-group-item').classList.add('active-item');
+      }
     });
 }
 
@@ -127,11 +155,12 @@ resultPagenation.addEventListener('click', page => {
   if (page.target.matches('.js-page-link')) {
     page.preventDefault();
 
+
     currentPage = Number(page.target.dataset.page);
 
     displayMoviesCard(pageCounter(pageOfOmdb(currentPage)));
 
-    resultPagenation.querySelectorAll('.page-item').forEach(page => page.classList.remove('active'));
+    document.querySelectorAll('.page-item').forEach(page => page.classList.remove('active'));
 
     page.target.closest('.page-item').classList.add('active');
     window.scrollTo(0, 0);
@@ -141,50 +170,49 @@ resultPagenation.addEventListener('click', page => {
 
 // Modal ma`lumotlarini sahifaga chiqarish
 
-function showModalInfo(data) {
-  var movieModalContent = $_('.movie-info-modal-dialog');
+function showFullInfo(movie) {
+  var fullContentWrapper = $_('.full-content-wrapper');
 
-  $_('.movie-info-modal-title', movieModalContent).textContent = data.Title;
-  $_('.movie-img', movieModalContent).src = data.Poster;
-  $_('.movie-img', movieModalContent).alt = `This is poster of ${data.Title}`;
-  $_('.movie-country', movieModalContent).textContent = data.Country;
-  $_('.movie-year', movieModalContent).textContent = data.Year;
-  $_('.movie-genre', movieModalContent).textContent = data.Genre;
-  $_('.movie-director', movieModalContent).textContent = data.Director;
-  $_('.movie-actors', movieModalContent).textContent = data.Actors;
-  $_('.movie-runtime', movieModalContent).textContent = data.Runtime;
-  $_('.movie-rating', movieModalContent).textContent = data.Rating;
-  $_('.movie-budget', movieModalContent).textContent = data.BoxOffice;
-  $_('.movie-production', movieModalContent).textContent = data.Production;
-  $_('.movie-language', movieModalContent).textContent = data.Language;
-  $_('.movie-awards', movieModalContent).textContent = data.Awards;
-  $_('.movie-more-info', movieModalContent).textContent = data.Plot;
+  $_('.movie-info-title', fullContentWrapper).textContent = movie.Title;
+  $_('.movie-img', fullContentWrapper).src = movie.Poster;
+  $_('.movie-img', fullContentWrapper).alt = `This is poster of ${movie.Title}`;
+  $_('.movie-country', fullContentWrapper).textContent = movie.Country;
+  $_('.movie-year', fullContentWrapper).textContent = movie.Year;
+  $_('.movie-genre', fullContentWrapper).textContent = movie.Genre;
+  $_('.movie-director', fullContentWrapper).textContent = movie.Director;
+  $_('.movie-actors', fullContentWrapper).textContent = movie.Actors;
+  $_('.movie-runtime', fullContentWrapper).textContent = movie.Runtime;
+  $_('.movie-rating', fullContentWrapper).textContent = movie.imdbRating;
+  $_('.movie-budget', fullContentWrapper).textContent = movie.BoxOffice;
+  $_('.movie-production', fullContentWrapper).textContent = movie.Production;
+  $_('.movie-language', fullContentWrapper).textContent = movie.Language;
+  $_('.movie-awards', fullContentWrapper).textContent = movie.Awards;
+  $_('.movie-more-info', fullContentWrapper).textContent = movie.Plot;
 
-  return movieModalContent;
+  return fullContentWrapper;
 }
 
-function openModalInfo(evt) {
+function openFullInfo(evt) {
+  fetch(`http://omdbapi.com/?apikey=11d5da55&i=${evt}&plot=full`)
+    .then(response => {
+      if (response.status === 200) {
+        return response.json();
+      }
+    })
+    .then(result => {
+      if (result.Response === 'True') {
+        showFullInfo(result);
+      }
+    })
+}
+
+elResult.addEventListener('click', evt => {
   if (evt.target.matches('.js-movie-modal-opener')) {
-    $_('.movie-info-modal').classList.remove('d-none');
-    fetch(`http://omdbapi.com/?apikey=11d5da55&i=${evt.target.dataset.target}&plot=full`)
-      .then(response => {
-        if (response.status === 200) {
-          return response.json();
-        }
-      })
-      .then(result => {
-        if (result.Response === 'True') {
-          showModalInfo(result);
-        }
-      })
+    openFullInfo(evt.target.dataset.target);
+    document.querySelectorAll('.list-group-item').forEach(item => {
+      item.classList.remove('active-item');
+    })
+
+    evt.target.parentElement.parentElement.classList.add('active-item');
   }
-}
-
-elResult.addEventListener('click', openModalInfo);
-
-function hideModalInfo() {
-  $_('.movie-info-modal').classList.add('d-none');
-}
-
-$_('.hide-modal').addEventListener('click', hideModalInfo);
-
+});
